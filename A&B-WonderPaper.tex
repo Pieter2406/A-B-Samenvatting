@@ -1,0 +1,523 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[dutch]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage{amsthm}
+\usepackage{todonotes}
+\theoremstyle{definition}
+\usepackage[style=L]{thmbox}
+\newtheorem{defi}{Definitie}[section]
+\newtheorem{stel}{Stelling}[section]
+\newtheorem{bIdee}{Bewijs idee}[section]
+\newtheorem{zDoen}{Zelf Doen}[section]
+\newtheorem{vb}{Voorbeeld}[section]
+\newtheorem{bewijs}{Bewijs}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{theorema}{Theorema}[section]
+\newcommand{\ra}{\ensuremath{\rightarrow}}
+\newcommand{\NFA}{\ensuremath{(Q,\Sigma,\delta,q_0,F)}}
+\newcommand{\PDA}{\ensuremath{(Q,\Sigma,\Gamma,\delta,q_0,F)}}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+
+\author{Pieter Verlinden}
+\title{Automaten \& Berekenbaarheid: Bewijzen}
+\begin{document}
+\textbf{\LARGE DEMOEN}
+\section{Talen en Automaten}
+	\subsection{Wat is een Taal?}
+		\begin{defi}
+			String over een alfabet $\Sigma$\\
+			Een \textbf{string} over een alfabet $\Sigma$ is een opeenvolging van nul, één of meer elementen van $\Sigma$
+		\end{defi}
+	\begin{defi}
+		Taal $L$ over een alfabet $\Sigma$\\
+		Een \textbf{taal $L$} over een alfabet $\Sigma$ is een verzameling van eindige strings over $\Sigma$
+	\end{defi}
+	
+	\begin{zDoen}[Kan fout zijn]
+		\begin{enumerate}
+			\item Kan je een beschrijving van de even getallen gebruiken om alle even getallen te genereren?\\
+			\textbf{Antwoord:} Ja, bijvoorbeeld als de beschrijving $2n$ is kan, voor elke $n \in \mathbb{N}$ een uniek even getal gegeneerd worden.
+			\item Kan je de string in de taal testen?\\
+			\textbf{Antwoord:} Ja, bijvoorbeeld elk getal modulo $2$ doen en kijken of het $1$ of $0$ is.
+		\end{enumerate}
+	\end{zDoen}
+	
+	\subsection{Een algebra van talen}
+		De verzameling van alle talen over een alfabet $\Sigma$ wordt een algebra als we er de volgende operaties op definiëren: 
+			Als $L_1$ en $L_2$ twee talen zijn dan:
+		\begin{itemize}
+			\item De unie van twee talen is een taal: $L_1 \cup L_2$
+			\item De doorsnede van twee talen is een taal: $L_1 \cap L_2$
+			\item het complement van een taal is een taal: $\overline{L_1}$
+		\end{itemize}
+	\section{Talen en berekenbaarheid}
+	\begin{defi}
+		Een \textbf{Turingmachine} is een 7-tal $(Q,\Sigma,\Gamma,\delta,q_s,q_a,q_r)$, waarbij $Q,\Sigma,\Gamma$ eindige verzamelingen zijn en:
+		\begin{itemize}
+			\item $Q$ is een verzameling toestanden;
+			\item $\Sigma$ is een input alfabet dat \# niet bevat;
+			\item $\Gamma$ is het tape alfabet: \# $\in \Gamma$ en $\Sigma \subset \Gamma$
+			\item $q_s$ is de starttoestand;
+			\item $q_a$ is de accepterende eindtoestand;
+			\item $q_r$ is de verwerpende eindtoestand verschillend van $q_a$
+			\item $\delta$ is de transitiefunctie: $Q\times\Gamma \ra Q \times \Gamma \times \{L,R,S\}$
+		\end{itemize}
+	\end{defi}
+	\begin{defi}
+		Een Turingmachine TM herkent $L_{TM}$
+	\end{defi}
+	\begin{defi}
+		Een taal $L$ is Turing-herkenbaar indien er een Turingmachine TM bestaat zodanig dat $L = L_{TM}$
+	\end{defi}
+	\begin{vb}
+		Stel $\Sigma = \{a,b\}$ en $L=\{a\}$
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{|c|c||c|c|c|}
+				\hline $Q$ & $\Gamma$ & $Q$ & $\Gamma$ & $LRS$ \\ 
+				\hline $q_s$ & a & $q_s$ & \# & $R$ \\ 
+				$q_s$ & b & x & b & $S$ \\ 
+				$q_s$ & \# & $q_a$ & - & - \\ 
+				x & a & x & a & $S$ \\ 
+				x & b & x & b & $S$ \\ 
+				x & \# & x & \# & $S$ \\ 
+				\hline 
+			\end{tabular}
+		\end{table}
+		Is een voorbeeld van $\delta$ van een TM die $\{a\}^*$ herkent.\\
+		Hierin is duidelijk dat $\infty_{TM}$ niet leeg is ($\infty_{TM}$ is de verzameling strings waarvoor TM niet stopt).\\	
+	\end{vb}
+	\begin{vb}
+		Herneem vorig alfabet en taal.\\
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{|c|c|c|c|c|}
+				\hline $Q$ & $\Gamma$ & $Q$ & $\Gamma$ & $LRS$ \\ 
+				\hline $q_s$ & a & $q_s$ & \# & R \\ 
+				$q_s$ & b & $q_r$ & - & - \\ 
+				$q_s$ & \# & $q_a$ & - & - \\ 
+				\hline
+			\end{tabular} 
+		\end{table}	
+		Is een voorbeeld van een TM die $L$ beslist.
+	\end{vb}
+	Hieruit kunnen we volgende definitie concluderen:
+	\begin{defi}
+		Een Turingmachine TM beslist een taal $L$ als TM $L$ herkent en dat daarbovenop er geen mogelijkheid tot oneindige lussen bestaat. M.a.w.: $\infty_{TM} = \emptyset$
+	\end{defi}
+	Hieruit volgt meteen volgende definitie:
+	\begin{defi}
+		Een taal L heet Turing-beslisbaar als er een Turingmachine is die $L$ beslist.
+	\end{defi}
+	En ook:
+	\begin{defi}
+		Een taal $L$ is \textbf{co-herkenbaar/co-beslisbaar} als $\overline{L}$ herkenbaar/beslisbaar is
+	\end{defi}
+	\begin{stel}
+		Als $L$ beslisbaar is, dan is $L$ ook co-beslisbaar.
+		\begin{bewijs}
+			Als je in de Turingmachine, die $L$ beslist, $q_a$ en $q_r$ van rol verwisselt, krijg je een nieuwe Turingmachine die $\overline{L}$ beslist en is dus voor elke TM die $L$ beslist, een TM te construeren die $\overline{L}$ beslist.\\ \qed
+		\end{bewijs}
+	\end{stel}
+	\begin{stel}
+		Als $L$ herkenbaar is en co-herkenbaar, dan is $L$ beslisbaar.
+		\begin{bewijs}
+			Laat $M_1$ de machine zijn die $L$ herkent en $M_2$ die $\overline{L}$ herkent.\\
+			We laten $M_1$ en $M_2$ parallel lopen in een nieuwe machine $M$. \begin{itemize}
+				\item $M_1$ accepteert $\Rightarrow$ $M$ accepteert;
+				\item $M_2$ accepteert $\Rightarrow$ $M$ verwerpt;
+			\end{itemize}.
+			Voor elke string zal ofwel $M_1$ ofwel $M_2$ stoppen en ze kunnen niet samen accepteren. Hieruit besluiten we dat $M$ de taal $L$ beslist (want $\infty_{TM} = \emptyset$).\\
+			\qed\\
+			\textbf{Opmerking:} Formeler kan $M$ gedefinieerd worden als een 2-tape machine.\\
+			$M_1 = (Q_1,\Sigma,\Gamma_1,\delta_1,q_s,q_{a1},q_{r1})$\\
+			$M_2 = (Q_2,\Sigma,\Gamma_2,\delta_2,q_s,q_{a2},q_{r2})$\\
+			
+			We construeren $M$ zodanig dat:\\
+			$M = (Q,\Sigma,\Gamma, \delta, q_s, q_a, q_r)$\\
+			
+			Waarbij:\\
+			$Q = Q_1 \times Q_2$\\
+			$\Gamma = \Gamma_1 \cup \Gamma_2$\\
+			$\delta: Q\times \Gamma^2 \ra Q\times \Gamma^2 \times \{L,R,S\}^2$\\
+			$q_s = (q_{s1},q_{s2})$\\
+			$q_a = (q_{a1},q_{r2})$\\
+			$q_r = (q_{r1}, q_{a2})$\\
+			
+			Stel:\\
+			$w_i\in \{L,R,S\}$\\
+			$\delta_1(q_{i1},a_1) = (q_{j1},b_1,w_1)$\\
+			$\delta_2(q_{i2},a_2) = (q_{j2},b_2,w_2)$\\
+			
+			dan:\\
+			$\delta((q_{i1},q_{i2}),a_1,a_2) = ((q_{j1},q_{j2}),b_1,b_2,w_1,w_2)$\\
+			\qed
+		\end{bewijs}
+	\end{stel}
+\textbf{\LARGE SIPSER}
+\section{Bewijzen}
+\subsection{Reguliere Talen}
+\subsubsection{De unie van twee reguliere talen is opnieuw een reguliere taal}
+\begin{bIdee}
+We hebben reguliere talen: $A_1$ en $A_2$ en willen aantonen dat $A_1 \cup A_2$ ook regulier is. Omdat $A_1$ en $A_2$ regulier zijn weten we dat er een eindige automaat $M_1$ bestaat die $A_1$ aanvaardt en een tweede eindige automaat $M_2$ die $A_2$ aanvaardt. Om te bewijzen dat $A_1 \cup A_2$ regulier is, geven we een eindige automaat $M$ die $A_1 \cup A_2$ aanvaardt.\\
+Het bewijs is per constructie. We construeren $M$ vanuit $M_1$ en $M_2$. $M$ moet een string accepteren wanneer $M_1$ \textbf{of} $M_2$ dit zou doen. Dit doen we door $M_1$ en $M_2$ te simuleren en de string te aanvaarden wanneer één van de simulaties de string aanvaardt.\\
+Hoe kunnen we automaat $M$ de automaten $M_1$ en $M_2$ laten simuleren? Hier moet er opgelet worden. Vanaf de symbolen van de string gelezen zijn kunnen we de "tape" (met de symbolen op) niet terugdraaien. We moeten dus $M_1$ en $M_2$ tegelijkertijd simuleren. Er moet dus een paar van toestanden onthouden worden. Als $M_1$ $k_1$ toestanden heeft en $M_2$ $k_2$ toestanden, dan is het aantal toestanden in $M$: $k_1 \cdot k_2$. De transities in $M$ gaan dus van paar tot paar. 
+\end{bIdee}
+\begin{bewijs}
+Stel \\
+$M_1$ aanvaardt $A_1$ en $M_1 = (Q_1,\Sigma,\delta_1,q_1,F_1)$, en \\
+$M_2$ aanvaardt $A_2$ en $M_2 = (Q_2,\Sigma,\delta_2,q_2,F_2)$.\\
+
+Construeer $M$ zodat $A_1 \cup A_2$ aanvaard worden met $M = (Q,\Sigma,\delta,q_0,F)$.\\
+\begin{enumerate}
+\item $Q=\{(r_1,r_2)|r_1 \in Q_1 \wedge r_2 \in Q_2\}$.\\
+Deze verzameling is het \textbf{Cartesisch Product} van de verzamelingen $Q_1$ en $Q_2$, geschreven als $Q_1 \times Q_2$. Het is de verzameling van alle paren van toestanden.
+\item $\Sigma$: het alfabet is het zelfde als in $M_1$ en $M_2$.
+\item $\delta$: de transitiefunctie is op volgende manier gedefinieerd: $\forall (r_1,r_2) \in Q$ en $\forall a\in \Sigma$: 
+$$\delta((r_1,r_2),a) = (\delta_1(r_1,a),\delta_2(r_2,a))$$
+$\delta$ heeft als invoer een toestand uit $M$ en geeft de volgende toestand uit $M$.
+\item $q_0$ is het paar $(q_1,q_2)$
+\item $F$ is de verzameling van paren van eindtoestanden uit $M_1$ \textbf{of} $M_2$. $$F  \{(r_1,r_2)|r_1\in F_1 \vee r_2 \in F_2\}$$
+\end{enumerate}
+\end{bewijs}
+\subsubsection{De concatenatie van twee reguliere talen is opnieuw een reguliere taal}
+\begin{bewijs}
+Stel\\
+ $N_1 = (Q_1,\Sigma,\delta_1,q_1,F_1)$ de taal $A_1$ accepteren,
+  en $N_2 = (Q_2,\Sigma,\delta_2,q_2,F_2)$ de taal $A_2$.\\
+
+Construeer $N=(Q,\Sigma,\delta,q_1,F_2)$ die de taal $A_1 \circ A_2$ accepteert.
+\begin{enumerate}
+\item $Q=Q_1\cup Q_2$. De toestanden van $N$ zijn alle toestanden van $N_1$ en $N_2$.
+\item De toestand $q_1$ is dezelfde als de start toestand van $N_1$.
+\item De eindtoestanden van $F_2$ zijn dezelfde als die van $N_2$.
+\item Definieer $\delta$ zodat voor elke $q \in Q$ en een $a\in\Sigma$,
+$$
+\delta(q,a) = \left\{
+    \begin{array}{ll}
+        \delta_1(q,a) & q\in Q_1 \text{ en } q\notin F_1 \\
+        \delta_1(q,a) & q\in F_1 \text{ en } a\neq \epsilon \\
+        \delta_1(q,a)\cup \{q_2\} & q\in F_1 \text{ en } a=\epsilon \\
+        \delta_1(q,a) & q\in Q_2
+    \end{array}
+\right.
+$$
+\end{enumerate}
+\end{bewijs}
+\subsubsection{De ster-operatie toegepast op een reguliere taal is opnieuw een reguliere taal}
+\begin{bewijs}
+Stel $N_1 = (Q_1,\Sigma,\delta_1,q_1,F_1)$ de taal $A_1$ accepteren.\\
+
+Construeer $N=(Q,\Sigma,\delta,q_0,F)$ die de taal $A^*_1$ accepteert.
+\begin{enumerate}
+\item $Q=\{q_0\} \cup Q_1$. De toestanden van $N$ zijn de toestanden van $N_1$ plus een nieuwe starttoestand.
+\item De toestand $q_0$ is de nieuwe start toestand.
+\item $F = \{q_0\}\cup F_1$. De eindtoestanden zijn de oude plus de nieuwe starttoestand.
+\end{enumerate}
+\end{bewijs}
+\subsubsection{Elke niet-deterministische eindige automaat heeft een equivalente deterministische eindige automaat.}
+\begin{bIdee}
+Als de taal aanvaard wordt door een NFA, moeten we het bestaan van een DFA aantonen, die deze taal ook aanvaardt. Het idee is dus om een NFA om te zetten naar een equivalente DFA die de NFA simuleert.\\
+Als $k$ het aantal toestanden is in een NFA, dan heeft het $2^k$ deelverzamelingen van toestanden. Elke deelverzameling komt overeen met een mogelijke toestand die de DFA moet onthouden. De DFA zal dus $2^k$ toestanden hebben. Het enige dat rest, is het vinden van een start -en eindtoestand van de DFA en zijn transitie-functie.
+\end{bIdee}
+\begin{bewijs}
+Stel $N = (Q,\Sigma,\delta,q_0,F)$ de NFA die een taal $A$ aanvaardt. We construeren een DFA $M=(Q',\Sigma,\delta',q_0',F')$ die ook de taal $A$ aanvaardt. Vooraleer we de volledige DFA construeren bekijken we eerst het makkelijkere geval waarin automaat $N$ geen $\epsilon$ pijlen heeft. Daarna nemen we deze pijlen er wel bij.
+\begin{enumerate}
+\item $Q'=\mathcal{P}(Q)$.\\
+Elke toestand van $M$ is een verzameling toestanden van $N$.
+\item Voor $R\in Q'$ en $a\in \Sigma$, stel $\delta'(R,a) = \{q\in Q|q\in\delta(r,a), r\in R\}$ Als $R$ een toestand is van $M$, dan is het ook een verzameling toestanden uit $N$. Formeel geschreven wordt dit: $$\delta'(R,a) = \bigcup_{r\in R}\delta(r,a)$$.
+\item $q_0' = \{q_0\}$.\\
+$M$ start in de toestand die overeenkomt met de starttoestand van $N$
+\item $F'=\{R\in Q'|s\in R \Rightarrow s\in F\}$.\\
+De automaat $M$ aanvaardt de taal als één van de toestanden waarin $M$ zich bevindt, een eindtoestand is van $N$.
+\end{enumerate}
+\end{bewijs}
+
+
+\subsection{Context Vrije Talen}
+\subsubsection{Elke context vrije taal is gegenereerd door een context vrije grammatica in Chomsky-normaal vorm}
+\begin{bIdee}
+We kunnen elke grammatica $G$ omzetten in de Chomsky-normaal vorm. Deze omzetting gebeurt door regels, die de condities schenden, om te zetten in equivalente regels die aan de condities voldoen. We beginnen met een start-variabele toe te voegen. Daarna elimineren we alle \textbf{$\epsilon$ regels} van de vorm $A \rightarrow \epsilon$. We elimineren ook alle eenheidsregels van de vorm $A\rightarrow B$. Tenslotte zetten we alle overblijvende regels om in zijn juiste vorm.
+\end{bIdee}
+\begin{bewijs}
+Eerst voegen we een nieuwe start-variabele $S_0$ en de regel $S_0 \rightarrow S$ toe, waar $S$ de originele start-variabele was. Deze verandering garandeert dat de start-variabele niet ergens aan de rechterkant van een regel voorkomt.\\
+Daarna behandelen we alle $\epsilon$ regels. We verwijderen een $\epsilon$-regel $A\rightarrow \epsilon$, waar $A$ niet de start-variabele is. Dan, voor elke $A$ aan de rechterkant van een regel, voegen we een regel toe waarin deze $A$ niet meer voorkomt. Met andere woorden als $R\rightarrow uAv$ een regel is met $u$ en $v$ strings van variabelen en eind-symbolen, dan voegen we de regel $R\rightarrow uv$ toe. Dit doen we voor elk voorkomen van $A$. Bijvoorbeeld: $R\rightarrow uAvAw$ zorgt voor het toevoegen van volgende regels: $R\rightarrow uvAw$, $R\rightarrow uAvw$ en $R\rightarrow uvw$. Als we de regel $R\rightarrow A$ tegenkomen, voegen we de regel $R\rightarrow \epsilon$ toe, tenzij we deze voorafgaand verwijderd hadden. We herhalen deze stappen tot we alle $\epsilon$ regels zonder start-variabele hebben geëlimineerd.\\
+Hierna behandelen we de eenheidsregels. We verwijderen de eenheidsregel $A \ra B$. Vanaf er een regel $B \ra u$ optreedt, voegen we de regel $A \ra u$ toe, tenzij dit een eenheidsregel was die eerder verwijderd is. Deze stap herhalen we tot er geen eenheidsregels meer zijn.\\
+Tenslotte zetten we alle overblijvende regels om in hun juiste vorm. Dit wil zeggen dat we elke regel $A\ra u_1u_2\cdots u_k$, met $k \geq 3$ en elke $u_i$ een variabele of een eind-symbool, omzetten naar $A\ra u_1A_1$, $A_1 \ra u_2A_2,\cdots , A_{k-2} \rightarrow u_{k-1}u_k$. De $A_i$'s zijn nieuwe variabelen. Als $k = 2$ vervangen we elk eind-symbool $u_i$ met een nieuwe variabele $U_i$ en voegen de regel $U_i\ra u_i$ toe. 
+\end{bewijs}
+
+\subsubsection{Een taal is context vrij als en slechts als ze geaccepteerd wordt door een PDA.}
+	\begin{lemma}[$\Rightarrow$]
+		Als een taal context vrij is dan bestaat er een PDA die deze accepteert.
+		
+		\begin{bewijs}
+			Stel $P = (Q,\Sigma,\Gamma,\delta,q_1,F)$. Stel $q$ en $r$ twee toestanden van de PDA $P$ en laat $a$ een symbool zijn uit $\Sigma_\epsilon$ en $s$ een symbool zijn uit $\Gamma_\epsilon$. We voeren volgende transitie in: $P$ gaat van toestand $q$ naar $r$ als ze $a$ leest (van de string) en $s$ popt (van de stack). Met andere woorden: ($a,s\ra u$). $u$ is in dit geval een hele string: $u_1 \cdots u_l$ en wordt volledig op de stack gepushed.\\
+			Deze actie kunnen we implementeren door nieuwe toestanden: 
+			\\$q_1, q_2, \cdots q_{l-1}$ te introduceren en de transitiefunctie als volgt te definiëren: \begin{align*}
+			\delta(q,a,s) &= \{(q_1,u_l)\}\\
+			\delta(q_1,\epsilon,\epsilon) &= \{(q_2,u_{l-1})\}\\
+			\delta(q_2,\epsilon,\epsilon) &= \{(q_3,u_{l-2})\}\\
+			&\vdots\\
+			\delta(q_{l-1},\epsilon,\epsilon) &= \{(r,u_1)\}
+			\end{align*}
+			Met andere woorden een reeks tussen toestanden die één voor één een symbool van $u$ op de stapel zetten. In transitienotatie zou dit zijn: 
+			\begin{align*}
+			a,s&\ra u_l\\
+			\epsilon,\epsilon &\ra u_{l-1}\\
+			\epsilon,\epsilon &\ra u_{l-2}\\
+			&\vdots\\
+			\epsilon,\epsilon &\ra u_{1}\\
+			\end{align*}
+			Deze signaturen zouden staan tussen de toestanden $q_1,q_2,\cdots,q_{l-1}$\\
+			
+			De toestanden van $P$ zijn $Q=\{q_{start},q_{loop}, q_{accept}\}$
+			\textbf{\LARGE TODO}
+		\end{bewijs}
+	\end{lemma}
+
+\section{Theorie}
+\subsection{Reguliere Talen}
+\subsubsection{Eindige Automaten}
+	\begin{defi}
+		Een \textbf{eindige automaat} is een 5-tal $(Q,\Sigma,\delta,q_0,F)$, waar
+		\begin{enumerate}
+			\item $Q$ is een eindige verzameling met de \textbf{toestanden} van de automaat.
+			\item $\Sigma$ is een eindige verzameling, het \textbf{alfabet} genoemd.
+			\item $\delta: Q\times \Sigma \ra Q$ is de \textbf{transitiefunctie}.
+			\item $q_0 \in Q$ is de \textbf{starttoestand}.
+			\item $F \subseteq Q$ is de verzameling \textbf{eindtoestanden}.			
+		\end{enumerate}
+	\end{defi}
+Nu er een formele definitie gegeven is voor een eindige automaat, kunnen we formele begrippen definiëren voor berekenbaarheid.\\
+	
+	\begin{defi}
+		Een taal noemt men een \textbf{reguliere taal} als er een eindige automaat bestaat die deze accepteert.
+	\end{defi}
+	Stel $M = \NFA$ een eindige automaat en $w=w_1w_2\cdots w_n$ een string waar elke $w_i$ een element is van het alfabet $\Sigma$. Dan accepteert $M$ de string $w$ als er een reeks toestanden $r_0,r_1,\cdots,r_n$ bestaat in $Q$ onder de volgende voorwaarden:
+	\begin{enumerate}
+		\item $r_0 = q_0$.
+		\item $\delta(r_i,w_{i+1})=r_{i+1}$, voor $i=0,\cdots,n-1$.
+		\item $r_n \in F$.
+	\end{enumerate} 
+	\paragraph{Reguliere operaties}
+	Er zijn drie hoofdoperaties binnen de reguliere talen en eindige automaten:
+	\begin{defi}
+		Stel $A$ en $B$ twee talen. We definiëren de \textbf{unie}, \textbf{concatenatie}, en de \textbf{ster} operatie als volgt:
+		\begin{itemize}
+			\item \textbf{Unie}: $A\cup B=\{x|x\in A \vee x\in B\}$.
+			\item \textbf{Concatenatie}: $A\circ B = \{xy|x\in A \wedge y \in B\}$.
+			\item \textbf{Ster}: $A^*=\{x_1 x_2\cdots x_k | k\geq \wedge \forall x_i\in A\}$.
+		\end{itemize}
+	\end{defi}
+	\subsubsection{Niet-Determinisme}
+	\paragraph{Verschil NFA DFA}
+	Elke toestand van een DFA heeft precies één uitgaande pijl voor elk symbool van het alfabet. Bij een NFA is hoeft dit niet het geval te zijn. Een DFA heeft ook alleen transitielabels voor symbolen uit het alfabet, terwijl een NFA labels mag hebben met het lege string symbool ($\epsilon$) ook al zit dit niet in het alfabet.
+	\begin{defi}
+		Een \textbf{niet-deterministische eindige automaat} is een 5-tal\\ $\NFA$, waar
+		\begin{enumerate}
+			\item $Q$ is een eindige verzameling toestanden.
+			\item $\Sigma$ is een eindig alfabet.
+			\item $\delta : Q\times \Sigma_\epsilon \ra \mathcal{P}(Q)$.
+			\item $q_0 \in Q$ is de start toestand.
+			\item $F \subseteq Q$ is de verzameling eindtoestanden.
+		\end{enumerate}
+	\end{defi}
+	
+\subsection{Context Vrije Talen}
+\subsubsection{Context Vrije Grammatica}
+Wat volgt is een voorbeeld van context vrije grammatica. We noemen dit $G_1$.
+\begin{align*}
+&A \rightarrow 0A1\\
+&A \rightarrow B\\
+&B \rightarrow \#
+\end{align*}
+Een grammatica bestaat uit een verzameling \textbf{substitutie regels}. Elke regel is een lijn in de grammatica. Deze regel houdt een symbool en een string in gescheiden door een pijl. Het symbool noemen we een \textbf{variabele}. De string bestaat uit variabelen en eind-symbolen.\\
+Eén variabele is de start-variabele (meestal aan de linkerkant van de bovenste regel). In het voorbeeld wordt dit:\\
+$\{A,B\}$ : Variabelen\\
+$\{0,1,\#\}$ : Eind-symbolen\\
+$A$ : Start-symbool.\\
+
+Een taal wordt op de volgende manier beschreven door een grammatica:
+\begin{enumerate}
+\item Schrijf de start variabele;
+\item Neem de eerst volgende variabele en vind een regel die start met die variabele. Vervang deze variabele met de rechterkant van de regel.
+\item Herhaal stap 2 tot er geen meer variabelen zijn om te vervangen
+\end{enumerate}
+\begin{vb}
+Voorbeeld van de afleiding van grammatica $G_1$:
+$$A\Rightarrow 0A1 \Rightarrow 00A11 \Rightarrow 000A111 \Rightarrow 000B111 \Rightarrow 000\#111$$
+\end{vb}
+Elke taal die gegenereerd kan worden door context vrije grammatica noemt men een \textbf{context vrije taal}.
+\begin{defi}
+Een \textbf{context vrije grammatica} is een vier-tal ($V,\Sigma,R,S$) waar:
+\begin{enumerate}
+\item $V$ is een eindige verzameling van variabelen.
+\item $\Sigma$ is een eindige verzameling, disjunct van $V$ met elementen die we de eind-symbolen noemen.
+\item $R$ is de eindige verzameling regels. Elke regel bestaat uit een variabele en een string van variabelen en eind-symbolen.
+\item $S\in V$ is de start-variabele.
+
+\end{enumerate}
+\end{defi}
+
+\paragraph{Context Vrije Grammatica's construeren}
+Context vrije grammatica's construeren vergt veel creativiteit. Vooral voor niet-reguliere expressies.
+\begin{vb}
+$CVG$ voor de volgende taal: $\{0^n1^n|n\geq0\} \cup \{1^n0^n|n\geq 0\}$:\\
+\begin{align*}
+&S \rightarrow S_1|S_2\\
+&S_1 \rightarrow 0S_11 | \epsilon\\
+&S_2 \rightarrow 1S_20 | \epsilon
+\end{align*}
+\end{vb}
+Voor reguliere talen is het eenvoudiger. Maak eerst een DFA voor de taal. Een DFA is a.d.h.v. een algoritme om te zetten in een CVG.
+\begin{enumerate}
+\item Maak een variabele $R_i$ voor elke toestand $q_i$ van de DFA.
+\item Voeg de regel $R_i \rightarrow aR_j$ aan de CVG toe als $\delta (q_i,a) = q_j$ een overgangsregel is in de DFA.
+\item Voeg de regel $R_i \rightarrow \epsilon$ toe als $q_i$ een eindtoestand is in de DFA.
+\item Maak van $R_0$ de start-variabele, waar $q_0$ de starttoestand is van de DFA.
+\end{enumerate}
+
+\paragraph{Chomsky Normaal Vorm}
+	\begin{defi}
+		Een context-vrije grammatica staat in \textbf{Chomsky normaal vorm} als elke regel van de vorm: 
+		\begin{align*}
+		A &\ra BC\\
+		A &\ra a\\
+		S &\ra \epsilon\\
+		\end{align*}
+		waar $a$ een eindsymbool is en $A$, $B$ en $C$ variabelen zijn. $B$ en $C$ mogen geen start variabelen zijn. Als extra wordt de laatste regel toegelaten waar $S$ het startsymbool is.
+	\end{defi}
+	\begin{vb}
+		Laat $G$ een CFG zijn. We zetten $G$ om in Chomsky normaal vorm aan de hand van het constructief bewijs in de sectie: Bewijzen.
+		\begin{enumerate}
+			\item De originele CFG $G$ staat links en de volgende iteratie van het algoritme rechts. Het resultaat van de eerste iteratie is de nieuwe startvariabele $S_0$.\\
+			\begin{minipage}{.4\textwidth}
+				\begin{align*}
+				S&\ra ASA | aB\\
+				A&\ra B|S\\
+				B&\ra b|\epsilon\\
+				\end{align*}
+			\end{minipage}
+			\begin{minipage}{.3\textwidth}
+				\begin{align*}
+				S_0&\ra S\\
+				S&\ra ASA | aB\\
+				A&\ra B|S\\
+				B&\ra b|\epsilon\\
+				\end{align*}
+			\end{minipage}
+			\item De tweede stap is om de $\epsilon$ regels te verwijderen. Deze worden verwijderd door op de plekken waar er in dit geval een $A$ voorkomt aan de rechter kanten, deze te vervangen door alle mogelijke configuraties. in dit geval: $ASA$ wordt $SA|AS|S$ \\
+			\begin{minipage}{.4\textwidth}
+				\begin{align*}
+				S_0&\ra S\\
+				S &\ra ASA|aB|a\\
+				A&\ra B|S|\epsilon\\
+				B&\ra b|\epsilon\\
+				\end{align*}
+			\end{minipage}
+			\begin{minipage}{.3\textwidth}
+				\begin{align*}
+				S_0&\ra S\\
+				S&\ra ASA|aB|a|SA|AS|S\\
+				A&\ra B|S\\
+				B&\ra b\\
+				\end{align*}
+				
+			\end{minipage}
+			\item Daarna verwijderen we de eenheidsregels (regels van de vorm: $A\ra B$):\\
+			\begin{minipage}{.4\textwidth}
+				\begin{align*}
+			  	S_0&\ra S\\
+				S&\ra ASA|aB|a|SA|AS|S\\
+				A&\ra B|S\\
+				B&\ra b\\
+				\end{align*}
+			\end{minipage}
+			\begin{minipage}{.3\textwidth}
+				\begin{align*}
+				S_0&\ra ASA|aB|a|SA|AS\\
+				S&\ra ASA|aB|a|SA|AS\\
+				A&\ra B|S\\
+				B&\ra b\\
+				\end{align*}
+			\end{minipage}
+			
+			\begin{minipage}{.4\textwidth}
+				\begin{align*}
+				S_0&\ra ASA|aB|a|SA|AS\\
+				S&\ra ASA|aB|a|SA|AS\\
+				A&\ra B|S\\
+				B&\ra b\\
+				\end{align*}
+			\end{minipage}
+			\begin{minipage}{.3\textwidth}
+				\begin{align*}
+				S_0&\ra ASA|aB|a|SA|AS\\
+				S&\ra ASA|aB|a|SA|AS\\
+				A&\ra ASA|aB|a|SA|AS|b\\
+				B&\ra b\\
+				\end{align*}
+			\end{minipage}
+			\item In de laatste stap moeten we de overblijvende regels nog omvormen naar de juiste vormen. Dit houdt bijvoorbeeld in dat regels zoals: $S \ra ASA$ en $S\ra aB$ (dus met drie letters in de rechterkant of met een eindsymbool en een variabele in de rechterkant) omgevormd moeten worden naar regels met twee letters. Dit doen we door \textit{hulpvariabelen te introduceren}.\\
+			\begin{minipage}{.3\textwidth}
+				\begin{align*}
+				S_0&\ra ASA|aB|a|SA|AS\\
+				S&\ra ASA|aB|a|SA|AS\\
+				A&\ra ASA|aB|a|SA|AS|b\\
+				B&\ra b\\
+				\end{align*}
+			\end{minipage}
+			\begin{minipage}{.5\textwidth}
+				\begin{align*}
+				S_0&\ra AA_1|UB|a|SA|AS\\
+				S&\ra AA_1|UB|a|SA|AS\\
+				A&\ra AA_1|UB|a|SA|AS|b\\
+				A_1 &\ra SA\\
+				U&\ra a\\
+				B&\ra b\\
+				\end{align*}
+			\end{minipage}
+		\end{enumerate}
+	\end{vb}
+	\subsubsection{PDA: Push-Down Automaten}
+	Push-Down automaten zijn zoals niet-deterministische automaten maar hebben een extra component: De \textit{stack}. We spreken in het heden altijd over een PDA. PDA's zijn equivalent aan CFG. Dit geeft ons een nieuwe manier om te bewijzen of een bepaalde taal al dan niet context vrij is. De \textit{stack} is zoals een stapel papieren. We kunnen enkel de inhoud van het bovenste papier bekijken. We kunnen er ook een papier bij opleggen of een papier afhalen (\textit{push} en \textit{pop}).\\
+	
+	Er bestaan zowel deterministische als niet-deterministische PDA's. Opmerkelijk is dat deze niet equivalent zijn.\\
+	\begin{defi}
+		Een \textbf{push-down automaat} is een 6-tal: $(Q,\Sigma,\Gamma,\delta,q_0,F)$ waar: \begin{enumerate}
+			\item $Q$ is de eindige verzameling toestanden;
+			\item $\Sigma$ is het invoer alfabet (eindig);
+			\item $\Gamma$ is het \textit{stack} alfabet (eindig);
+			\item $\delta : Q\times \Sigma_\epsilon \times \Gamma_\epsilon \ra \mathcal{P}(Q\times \Gamma_\epsilon)$ is de overgangsfunctie;
+			\item $q_0 \in Q$ is de starttoestand;
+			\item $F\subseteq Q$ is de eindige verzameling eindtoestanden.  
+		\end{enumerate}
+	\end{defi}
+	Overgangen (bij pijlen) worden als volgt genoteerd: $\alpha,\beta \ra \gamma$ waar \begin{itemize}
+		\item $\alpha$ het invoersymbool;
+		\item $\beta$ het symbool op de top van de \textit{stack};
+		\item $\gamma$ het symbool dat de top van de \textit{stack} vervangt.
+	\end{itemize}
+	Elk van de symbolen kunnen $\epsilon$ zijn. Er wordt volgend gevallenonderscheid gemaakt: \begin{itemize}
+		\item $\alpha = \epsilon$: De automaat mag de transitie doen zonder een symbool te lezen van de invoer;
+		\item $\beta = \epsilon$: De automaat mag de transitie doen zonder een symbool van de \textit{stack} te lezen of te \textit{poppen};
+		\item $\gamma = \epsilon$: De automaat schrijft niets op de \textit{stack} bij het maken van de transitie.
+	\end{itemize}
+	
+	\subsubsection{Niet-context vrije talen}
+	\subsection{De Church-Turing Thesis}
+	\subsubsection{Turing machines}
+	Het verschil tussen een eindige automaten en Turing machines kan samengevat worden in volgende lijst:\begin{enumerate}
+		\item Een Turing machine kan schrijven en lezen op en van een tape;
+		\item De leeskop kan zowel links als rechts bewegen;
+		\item De tape is oneindig;
+		\item De eindtoestanden (zowel aanvaarding als verwerping) hebben onmiddellijk effect.
+	\end{enumerate}	
+\end{document}
