@@ -28,53 +28,7 @@
 \author{Pieter Verlinden}
 \title{Automaten \& Berekenbaarheid: Bewijzen}
 \begin{document}
-\textbf{\LARGE DEMOEN}
-\section{Voorkennis}
-	\subsection{Telbaar/ontelbaar}
-		\begin{defi}
-			Een set is \textbf{telbaar} als deze eindig is of dezelfde grootte heeft als $\mathbb{N}$
-		\end{defi}
-		
-		Telbaar komt overeen met de mogelijkheid tot het toekennen van een natuurlijk getal aan elk element van een set. Elk element kan dus 'geteld' worden als eerste, tweede, enz. Bij een eindige set is het evident dat dit mogelijk is.
-	\begin{vb}
-		Telbaarheid bij de set ${a, b, c, d}$.
-		\begin{table}[H]
-			\centering
-			\begin{tabular}{|c|c|}
-				\hline $Element$ & $\mathbb{N}$ \\ 
-				\hline $a$ & $1$ \\ 
-				$b$ & $2$ \\ 
-				$c$ & $3$ \\
-				$d$ & $4$ \\  
-				\hline 
-			\end{tabular}
-		\end{table}
-		Elk element in de tabel kan aangeduid worden a.d.h.v. zijn overeenkomstig natuurlijk getal.	
-	\end{vb}
-	
-	Om te kijken of een set dezelfde grootte heeft als $\mathbb{N}$ is het allereerst belangrijk te weten wat dit betekent. Voor eindige sets is dit eenvoudig, deze kunnen immers geteld worden om te kijken of ze even groot zijn. Het is echter ook mogelijk om te kijken of er een 'one-to-one' mapping of bijectie bestaat tussen de elementen van beide sets. Omdat het tellen van oneindige verzamelingen niet mogelijk is moeten we dus kijken of er een mapping bestaat tussen de elementen van beide sets.
-	
-	Een mapping tussen twee oneindige sets is intuïtief niet altijd logisch. Hoewel je misschien zou zeggen dat dat set van rationale getallen $\mathbb{Q}$ groter is dan de set van natuurlijke getallen $\mathbb{N}$ klopt dit niet. Volgend bewijs toont aan dat er een mapping bestaat tussen beide sets, bijgevolg zijn ze even groot.
-	\begin{bewijs}
-		Mapping tussen $\mathbb{Q}$ en $\mathbb{N}$.
-		\begin{table}[H]
-			\centering
-			\begin{tabular}{|c|c|c|c|}
-				\hline $1/1$ & $1/2$ & $1/3$ & $...$\\ 
-				$2/1$ & $(2/2)$ & $2/3$ & $...$\\ 
-				$3/1$ & $3/2$ & $(3/3)$ & $...$\\ 
-				$...$ & $...$ & $...$ & $...$\\ 
-				\hline 
-			\end{tabular}
-		\end{table}
-		Elementen tussen haakjes worden niet bekeken, deze stellen immers hetzelfde object van de set voor als $1/1$. \\
-		
-		We kunnen deze matrix omzetten tot een lijst, om zo een mapping te maken met $\mathbb{N}$. Een slechte aanpak zou zijn om alle rijen achter elkaar te zetten. Omdat elke rij oneindig doorloopt komt de mapping nooit verder dan de eerste rij (probeer bijvoorbeeld te beantwoorden welk element van $\mathbb{N}$ gemapt is met $2/1$). 
-		
-		We kunnen echter ook vanuit het eerste element van elke rij de schuine diagonaal naar boven bekijken. Als we de elementen van elke diagonaal achtereen in een lijst zetten kunnen we elk element van $\mathbb{N}$ mappen met een element van $\mathbb{Q}$. Hiermee is aangetoond dat Q telbaar is. \qed
-	\end{bewijs}
-	
-				
+\textbf{\LARGE DEMOEN}\\			
 		
 \section{Talen en Automaten}
 	\subsection{Wat is een Taal?}
@@ -208,7 +162,10 @@
 			\qed
 		\end{bewijs}
 	\end{stel}
-\textbf{\LARGE SIPSER}
+
+\newpage
+\textbf{\LARGE SIPSER}\\
+
 \section{Bewijzen}
 \subsection{Reguliere Talen}
 \subsubsection{De unie van twee reguliere talen is opnieuw een reguliere taal}
@@ -328,7 +285,52 @@ Tenslotte zetten we alle overblijvende regels om in hun juiste vorm. Dit wil zeg
 			\textbf{\LARGE TODO}
 		\end{bewijs}
 	\end{lemma}
-
+\subsection{Telbaar/ontelbaar}
+	\begin{defi}
+		Een set is \textbf{telbaar} als deze eindig is of dezelfde grootte heeft als $\mathbb{N}$
+	\end{defi}
+	
+	Telbaar komt overeen met de mogelijkheid tot het toekennen van een natuurlijk getal aan elk element van een set. Elk element kan dus 'geteld' worden als eerste, tweede, enz. Bij een eindige set is het evident dat dit mogelijk is.
+	\begin{vb}
+		Telbaarheid bij de set ${a, b, c, d}$.
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{|c|c|}
+				\hline $Element$ & $\mathbb{N}$ \\ 
+				\hline $a$ & $1$ \\ 
+				$b$ & $2$ \\ 
+				$c$ & $3$ \\
+				$d$ & $4$ \\  
+				\hline 
+			\end{tabular}
+		\end{table}
+		Elk element in de tabel kan aangeduid worden a.d.h.v. zijn overeenkomstig natuurlijk getal.	
+	\end{vb}
+	
+	Om te kijken of een set dezelfde grootte heeft als $\mathbb{N}$ is het allereerst belangrijk te weten wat dit betekent. Voor eindige sets is dit eenvoudig, deze kunnen immers geteld worden om te kijken of ze even groot zijn. Het is echter ook mogelijk om te kijken of er een 'one-to-one' mapping of bijectie bestaat tussen de elementen van beide sets. Omdat het tellen van oneindige verzamelingen niet mogelijk is moeten we dus kijken of er een mapping bestaat tussen de elementen van beide sets.
+	
+	Een mapping tussen twee oneindige sets is intuïtief niet altijd logisch. Hoewel je misschien zou zeggen dat dat set van rationale getallen $\mathbb{Q}$ groter is dan de set van natuurlijke getallen $\mathbb{N}$ klopt dit niet. Volgend bewijs toont aan dat er een mapping bestaat tussen beide sets, bijgevolg zijn ze even groot.
+	\begin{bewijs}
+		Mapping tussen $\mathbb{Q}$ en $\mathbb{N}$.
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{|c|c|c|c|}
+				\hline $1/1$ & $1/2$ & $1/3$ & $...$\\ 
+				$2/1$ & $(2/2)$ & $2/3$ & $...$\\ 
+				$3/1$ & $3/2$ & $(3/3)$ & $...$\\ 
+				$...$ & $...$ & $...$ & $...$\\ 
+				\hline 
+			\end{tabular}
+		\end{table}
+		Elementen tussen haakjes worden niet bekeken, deze stellen immers hetzelfde object van de set voor als $1/1$. \\
+		
+		We kunnen deze matrix omzetten tot een lijst, om zo een mapping te maken met $\mathbb{N}$. Een slechte aanpak zou zijn om alle rijen achter elkaar te zetten. Omdat elke rij oneindig doorloopt komt de mapping nooit verder dan de eerste rij (probeer bijvoorbeeld te beantwoorden welk element van $\mathbb{N}$ gemapt is met $2/1$). 
+		
+		We kunnen echter ook vanuit het eerste element van elke rij de schuine diagonaal naar boven bekijken. Als we de elementen van elke diagonaal achtereen in een lijst zetten kunnen we elk element van $\mathbb{N}$ mappen met een element van $\mathbb{Q}$. Hiermee is aangetoond dat Q telbaar is. \qed
+	\end{bewijs}
+	
+	
+\newpage
 \section{Theorie}
 \subsection{Reguliere Talen}
 \subsubsection{Eindige Automaten}
