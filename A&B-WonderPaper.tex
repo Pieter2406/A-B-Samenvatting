@@ -127,6 +127,7 @@
 			Als je in de Turingmachine, die $L$ beslist, $q_a$ en $q_r$ van rol verwisselt, krijg je een nieuwe Turingmachine die $\overline{L}$ beslist en is dus voor elke TM die $L$ beslist, een TM te construeren die $\overline{L}$ beslist.\\ \qed
 		\end{bewijs}
 	\end{stel}
+	\newpage
 	\begin{stel}
 		Als $L$ herkenbaar is en co-herkenbaar, dan is $L$ beslisbaar.
 		\begin{bewijs}
@@ -162,7 +163,31 @@
 			\qed
 		\end{bewijs}
 	\end{stel}
-
+	\newpage
+	\todo[inline]{bewijs dat het aantal Turingmachines aftelbaar oneindig is.}
+	\todo[inline]{bewijs dat een Turingmachine juist één taal herkent.}
+\begin{stel}
+	Er bestaat een taal die niet herkenbaar is.\\
+	\begin{bewijs}
+		We weten dat het aantal Turingmachines aftelbaar oneindig is. We weten ook dat elke Turingmachine juist één taal herkent. Tenslotte weten we dat het aantal talen, niet-aftelbaar oneindig is (De verzameling talen is: $\mathcal{P}(\Sigma^*)$).\\
+		Hieruit besluiten we dat er meer talen zijn dan er Turingmachines zijn en bijgevolg bestaat er een taal die niet herkenbaar is. Er zijn zelfs niet-aftelbaar veel niet-herkenbare talen. \qed
+	\end{bewijs}
+\end{stel}
+\begin{zDoen}
+	\begin{itemize}
+		\item Elke string is herkenbaar.\\
+		\textbf{Antwoord:}
+		\item Elke string is beslisbaar.\\
+		\textbf{Antwoord:}
+		\item Elke eindige taal is besllisbaar/herkenbaar.\\
+		\textbf{Antwoord:}
+		\item De unie/doorsnede van twee herkenbare talen is herkenbaar.\\
+		\textbf{Antwoord:}
+		\item De doorsnede van een herkenbare en een beslisbare taal is beslisbaar.\\
+		\textbf{Antwoord:}
+	\end{itemize}
+\end{zDoen}
+\todo[inline]{Zelf doen beantwoorden}
 \newpage
 \textbf{\LARGE SIPSER}\\
 
@@ -174,6 +199,7 @@ We hebben reguliere talen: $A_1$ en $A_2$ en willen aantonen dat $A_1 \cup A_2$ 
 Het bewijs is per constructie. We construeren $M$ vanuit $M_1$ en $M_2$. $M$ moet een string accepteren wanneer $M_1$ \textbf{of} $M_2$ dit zou doen. Dit doen we door $M_1$ en $M_2$ te simuleren en de string te aanvaarden wanneer één van de simulaties de string aanvaardt.\\
 Hoe kunnen we automaat $M$ de automaten $M_1$ en $M_2$ laten simuleren? Hier moet er opgelet worden. Vanaf de symbolen van de string gelezen zijn kunnen we de "tape" (met de symbolen op) niet terugdraaien. We moeten dus $M_1$ en $M_2$ tegelijkertijd simuleren. Er moet dus een paar van toestanden onthouden worden. Als $M_1$ $k_1$ toestanden heeft en $M_2$ $k_2$ toestanden, dan is het aantal toestanden in $M$: $k_1 \cdot k_2$. De transities in $M$ gaan dus van paar tot paar. 
 \end{bIdee}
+\newpage
 \begin{bewijs}
 Stel \\
 $M_1$ aanvaardt $A_1$ en $M_1 = (Q_1,\Sigma,\delta_1,q_1,F_1)$, en \\
@@ -191,6 +217,7 @@ $\delta$ heeft als invoer een toestand uit $M$ en geeft de volgende toestand uit
 \item $F$ is de verzameling van paren van eindtoestanden uit $M_1$ \textbf{of} $M_2$. $$F  \{(r_1,r_2)|r_1\in F_1 \vee r_2 \in F_2\}$$
 \end{enumerate}
 \end{bewijs}
+\newpage
 \subsubsection{De concatenatie van twee reguliere talen is opnieuw een reguliere taal}
 \begin{bewijs}
 Stel\\
@@ -282,9 +309,10 @@ Tenslotte zetten we alle overblijvende regels om in hun juiste vorm. Dit wil zeg
 			Deze signaturen zouden staan tussen de toestanden $q_1,q_2,\cdots,q_{l-1}$\\
 			
 			De toestanden van $P$ zijn $Q=\{q_{start},q_{loop}, q_{accept}\}$
-			\textbf{\LARGE TODO}
+			
 		\end{bewijs}
 	\end{lemma}
+	\todo[inline]{Bewijs PDA afwerken}
 \subsection{Telbaar/ontelbaar}
 	\begin{defi}
 		Een set is \textbf{telbaar} als deze eindig is of dezelfde grootte heeft als $\mathbb{N}$
@@ -310,6 +338,7 @@ Tenslotte zetten we alle overblijvende regels om in hun juiste vorm. Dit wil zeg
 	Om te kijken of een set dezelfde grootte heeft als $\mathbb{N}$ is het allereerst belangrijk te weten wat dit betekent. Voor eindige sets is dit eenvoudig, deze kunnen immers geteld worden om te kijken of ze even groot zijn. Het is echter ook mogelijk om te kijken of er een 'one-to-one' mapping of bijectie bestaat tussen de elementen van beide sets. Omdat het tellen van oneindige verzamelingen niet mogelijk is moeten we dus kijken of er een mapping bestaat tussen de elementen van beide sets.
 	
 	Een mapping tussen twee oneindige sets is intuïtief niet altijd logisch. Hoewel je misschien zou zeggen dat dat set van rationale getallen $\mathbb{Q}$ groter is dan de set van natuurlijke getallen $\mathbb{N}$ klopt dit niet. Volgend bewijs toont aan dat er een mapping bestaat tussen beide sets, bijgevolg zijn ze even groot.
+
 	\begin{bewijs}
 		Mapping tussen $\mathbb{Q}$ en $\mathbb{N}$.
 		\begin{table}[H]
@@ -561,12 +590,16 @@ Voor reguliere talen is het eenvoudiger. Maak eerst een DFA voor de taal. Een DF
 	\end{itemize}
 	
 	\subsubsection{Niet-context vrije talen}
+	\todo[inline]{Hoofdstuk verder afwerken}
 	\subsection{De Church-Turing Thesis}
+	
 	\subsubsection{Turing machines}
 	Het verschil tussen een eindige automaten en Turing machines kan samengevat worden in volgende lijst:\begin{enumerate}
 		\item Een Turing machine kan schrijven en lezen op en van een tape;
 		\item De leeskop kan zowel links als rechts bewegen;
 		\item De tape is oneindig;
 		\item De eindtoestanden (zowel aanvaarding als verwerping) hebben onmiddellijk effect.
-	\end{enumerate}	
+	\end{enumerate}
+	\newpage
+	\listoftodos	
 \end{document}
